@@ -28,11 +28,12 @@ var ghPages = require('gulp-gh-pages');
 var libName = 'adventr-realtime'
 var paths = {
   libSource: 'src/',
-  tmp: 'tmp',
+  tmp: 'tmptmp/',
   dist: 'dist/'
 };
 paths.static = [
   join(paths.demo, paths.libSource, '**/*'),
+  './node_modules/showdown/compressed.showdown.js',
   join('!', paths.demo, paths.libSource, '**/*.less'),
   join('!', paths.demo, paths.libSource, '**/*.js')
 ]
@@ -72,9 +73,9 @@ var appBundler = watchify(
   })
 );
 appBundler.transform(reactify);
-appBundler.exclude('jquery');
+appBundler.exclude('showdown');
 
-gulp.task('js', function(){
+gulp.task('tmp:js', function(){
   return appBundler.bundle()
     // browserify -> gulp transfer
     .pipe(source('app.js'))
@@ -110,7 +111,7 @@ gulp.task('server', function(cb){
 
 gulp.task('watch', function(){
   gulp.watch(paths.css, ['tmp:css']);
-  demoBundler.on('update', function(){
+  appBundler.on('update', function(){
     gulp.start('tmp:js');
   });
   gulp.watch(paths.static, ['tmp:static']);

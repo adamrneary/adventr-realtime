@@ -19,12 +19,13 @@
   },
   "author": "Adam Neary (adamrneary)",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
+    "bootstrap": "^3.3.1",
     "browserify": "^5.8.0",
     "del": "^0.1.3",
     "ecstatic": "^0.5.4",
+    "firebase": "^2.0.6",
     "gulp": "^3.8.6",
     "gulp-cached": "^1.0.1",
     "gulp-gh-pages": "^0.3.3",
@@ -33,8 +34,10 @@
     "gulp-sourcemaps": "^1.1.0",
     "merge-stream": "^0.1.5",
     "react": "^0.11.0",
+    "reactfire": "^0.4.0",
     "reactify": "^0.14.0",
     "run-sequence": "^1.0.1",
+    "showdown": "^0.3.1",
     "vinyl-buffer": "0.0.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^1.0.0"
