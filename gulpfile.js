@@ -18,11 +18,18 @@ var browserify = require('browserify');
 var reactify = require('reactify');
 var sourcemaps = require('gulp-sourcemaps');
 
-// dev/deploy
+// dev
 var http = require('http');
 var path = require('path');
 var ecstatic = require('ecstatic');
 var liveReload = require('gulp-livereload');
+
+// deploy
+var usemin = require('gulp-usemin');
+var uglify = require('gulp-uglify');
+var minifyHtml = require('gulp-minify-html');
+var minifyCss = require('gulp-minify-css');
+var rev = require('gulp-rev');
 var ghPages = require('gulp-gh-pages');
 
 var libName = 'adventr-realtime'
@@ -36,6 +43,12 @@ paths.static = [
   './node_modules/showdown/compressed.showdown.js',
   join('!', paths.demo, paths.libSource, '**/*.less'),
   join('!', paths.demo, paths.libSource, '**/*.js')
+]
+paths.distStatic = [
+  join(paths.dist, '**/*'),
+  join('!', paths.dist, '**/*.html'),
+  join('!', paths.dist, '**/*.css'),
+  join('!', paths.dist, '**/*.js')
 ]
 paths.css = [
   join(paths.libSource, '**/*.less')
@@ -132,37 +145,25 @@ gulp.task('dist:clean', function (cb) {
   del(join(paths.dist), cb);
 });
 
-// TODO: Minify and copy over
-gulp.task('dist:css', function(){
-  // gulp.src(join(paths.tmp, 'app.css'))
-  //   .pipe(cached('dist-css'))
-  //   // .pipe(less())
-  //   // .pipe(rename(join(libName, '.css')))
-  //   .pipe(gulp.dest(paths.dist))
+gulp.task('dist:usemin', function () {
+  return gulp.src(join(paths.tmp, 'index.html'))
+      .pipe(usemin({
+        css: [rev()],
+        html: [minifyHtml({empty: true})],
+        js: [uglify(), rev()]
+      }))
+      .pipe(gulp.dest(paths.dist));
 });
 
-// TODO: Minify and copy over
-gulp.task('dist:js', function(){
-  // gulp.src(join(paths.tmp, 'app.js'))
-  //   .pipe(cached('dist-css'))
-  //   // .pipe(less())
-  //   // .pipe(rename(join(libName, '.css')))
-  //   .pipe(gulp.dest(paths.dist))
-});
-
-// TODO: Minify and copy over
 gulp.task('dist:static', function(){
-  // gulp.src(join(paths.tmp, 'app.js'))
-  //   .pipe(cached('dist-css'))
-  //   // .pipe(less())
-  //   // .pipe(rename(join(libName, '.css')))
-  //   .pipe(gulp.dest(paths.dist))
+  return gulp.src(paths.distStatic)
+    .pipe(gulp.dest(paths.dist))
 });
 
 gulp.task("dist", function(callback) {
   return runSequence(
     ['dist:clean'],
-    ['dist:css', 'dist:js', 'dist:static'],
+    ['dist:usemin', 'dist:static'],
     callback
   );
 });
@@ -171,7 +172,7 @@ gulp.task("dist", function(callback) {
 // ============================================================================
 
 gulp.task('gh-pages', function(){
-  return gulp.src(join(paths.demo, paths.dist, '**/*'))
+  return gulp.src(join(paths.dist, '**/*'))
     .pipe(ghPages());
 });
 
