@@ -11,6 +11,7 @@ var ReactFireMixin = require('reactfire');
 window.React = React;
 
 var firebaseApp = "https://luminous-heat-2841.firebaseio.com/";
+var projectId = location.hash.substring(1);
 
 var ViewCount = React.createClass({
   mixins: [ReactFireMixin],
@@ -20,13 +21,15 @@ var ViewCount = React.createClass({
   },
 
   componentWillMount: function() {
-    this.bindAsObject(new Firebase(firebaseApp + "testObject"), "data");
+    var firebaseLocation = firebaseApp + 'project/' + projectId;
+    this.bindAsObject(new Firebase(firebaseLocation), "data");
   },
 
   render: function() {
     return (
       <div id="viewCount">
-        <OdometerComponent value={this.state.data} />
+        <h3>{this.state.data.name}</h3>
+        <OdometerComponent value={this.state.data.viewCount} />
       </div>
     );
   }
@@ -48,6 +51,6 @@ var OdometerComponent = React.createClass({
 })
 
 React.renderComponent(
-  <ViewCount />,
+  <ViewCount projectId={projectId}/>,
   document.getElementById('content')
 );
