@@ -40,9 +40,9 @@ var paths = {
 };
 paths.static = [
   join(paths.demo, paths.libSource, '**/*'),
-  './node_modules/showdown/compressed.showdown.js',
   join('!', paths.demo, paths.libSource, '**/*.less'),
-  join('!', paths.demo, paths.libSource, '**/*.js')
+  join('!', paths.demo, paths.libSource, '**/*.js'),
+  'node_modules/odometer/odometer.js'
 ]
 paths.distStatic = [
   join(paths.dist, '**/*'),
