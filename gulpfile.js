@@ -15,7 +15,7 @@ var less = require('gulp-less');
 // js
 var watchify = require('watchify');
 var browserify = require('browserify');
-var reactify = require('reactify');
+var coffeeify = require('coffeeify');
 var sourcemaps = require('gulp-sourcemaps');
 
 // dev
@@ -77,7 +77,7 @@ gulp.task('tmp:css', function(){
 });
 
 var appBundler = watchify(
-  browserify(join('./', paths.libSource, 'app.js'), {
+  browserify(join('./', paths.libSource, 'app.coffee'), {
     cache: bundleCache,
     packageCache: pkgCache,
     fullPaths: true,
@@ -85,8 +85,7 @@ var appBundler = watchify(
     debug: true
   })
 );
-appBundler.transform(reactify);
-appBundler.exclude('showdown');
+appBundler.transform(coffeeify);
 
 gulp.task('tmp:js', function(){
   return appBundler.bundle()
