@@ -41,6 +41,7 @@
     "merge-stream": "^0.1.5",
     "odometer": "^0.4.6",
     "react": "^0.11.0",
+    "react-odometer": "0.0.1",
     "reactfire": "^0.4.0",
     "reactify": "^0.14.0",
     "run-sequence": "^1.0.1",
