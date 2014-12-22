@@ -631,65 +631,52 @@
 
 }).call(this);
 
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.app=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./src/app.js":[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-'use strict';
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.app=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"./src/app.coffee":[function(require,module,exports){
+var Firebase, OdometerComponent, React, ReactFireMixin, ViewCount, firebaseApp, projectId;
 
-var React = require('react');
-var Firebase = require('firebase');
-var ReactFireMixin = require('reactfire');
+React = require('react');
 
-// https://github.com/facebook/react-devtools
-window.React = React;
+Firebase = require('firebase');
 
-var firebaseApp = "https://luminous-heat-2841.firebaseio.com/";
-var projectId = location.hash.substring(1);
+ReactFireMixin = require('reactfire');
 
-var ViewCount = React.createClass({displayName: 'ViewCount',
+OdometerComponent = require('react-odometer');
+
+firebaseApp = 'https://luminous-heat-2841.firebaseio.com/';
+
+projectId = location.hash.substring(1) || 14;
+
+ViewCount = React.createClass({
   mixins: [ReactFireMixin],
-
   getInitialState: function() {
-    return {data: 0};
+    return {
+      data: {
+        name: '…loading…',
+        events: {
+          'Video View': 10000
+        }
+      }
+    };
   },
-
   componentWillMount: function() {
-    var firebaseLocation = firebaseApp + 'project/' + projectId;
-    this.bindAsObject(new Firebase(firebaseLocation), "data");
+    return this.bindAsObject(new Firebase("" + firebaseApp + "project/" + projectId), 'data');
   },
-
   render: function() {
-    return (
-      React.DOM.div({id: "viewCount"}, 
-        React.DOM.h3(null, this.state.data.name), 
-        OdometerComponent({value: this.state.data.viewCount})
-      )
-    );
+    return React.DOM.div({
+      id: 'viewCount'
+    }, React.DOM.h3(null, this.state.data.name), React.createElement(OdometerComponent, {
+      value: this.state.data.events['Video View']
+    }));
   }
 });
 
-var OdometerComponent = React.createClass({displayName: 'OdometerComponent',
-  componentDidMount: function(){
-     this.odometer = new Odometer({
-      el: this.getDOMNode(),
-      value: this.props.value
-    });
-  },
-  componentDidUpdate: function() {
-   this.odometer.update(this.props.value)
-  },
-  render: function() {
-    return React.DOM.div()
-  }
-})
+React.renderComponent(React.createElement(ViewCount, {
+  projectId: projectId
+}), document.getElementById('content'));
 
-React.renderComponent(
-  ViewCount({projectId: projectId}),
-  document.getElementById('content')
-);
 
-},{"firebase":"/Users/adamrneary/Developer/adventr-realtime/node_modules/firebase/lib/firebase-web.js","react":"/Users/adamrneary/Developer/adventr-realtime/node_modules/react/react.js","reactfire":"/Users/adamrneary/Developer/adventr-realtime/node_modules/reactfire/dist/reactfire.js"}],"/Users/adamrneary/Developer/adventr-realtime/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+
+},{"firebase":"/Users/adamrneary/Developer/adventr-realtime/node_modules/firebase/lib/firebase-web.js","react":"/Users/adamrneary/Developer/adventr-realtime/node_modules/react/react.js","react-odometer":"/Users/adamrneary/Developer/adventr-realtime/node_modules/react-odometer/index.js","reactfire":"/Users/adamrneary/Developer/adventr-realtime/node_modules/reactfire/dist/reactfire.js"}],"/Users/adamrneary/Developer/adventr-realtime/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -1003,7 +990,27 @@ O.prototype.Je=function(a,b){D("Firebase.resetPassword",2,2,arguments.length);cc
 function qb(a,b){x(!b||!0===a||!1===a,"Can't turn on custom loggers persistently.");!0===a?("undefined"!==typeof console&&("function"===typeof console.log?ob=q(console.log,console):"object"===typeof console.log&&(ob=function(a){console.log(a)})),b&&Ba.set("logging_enabled",!0)):a?ob=a:(ob=null,Ba.remove("logging_enabled"))}O.enableLogging=qb;O.ServerValue={TIMESTAMP:{".sv":"timestamp"}};O.SDK_VERSION="2.0.6";O.INTERNAL=Y;O.Context=Ah;O.TEST_ACCESS=$;})();
 module.exports = Firebase;
 
-},{}],"/Users/adamrneary/Developer/adventr-realtime/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
+},{}],"/Users/adamrneary/Developer/adventr-realtime/node_modules/react-odometer/index.js":[function(require,module,exports){
+var React = require('react');
+
+var OdometerComponent = React.createClass({
+  componentDidMount: function(){
+     this.odometer = new Odometer({
+      el: this.getDOMNode(),
+      value: this.props.value
+    });
+  },
+  componentDidUpdate: function() {
+   this.odometer.update(this.props.value)
+  },
+  render: function() {
+    return React.DOM.div()
+  }
+})
+
+module.exports = OdometerComponent;
+
+},{"react":"/Users/adamrneary/Developer/adventr-realtime/node_modules/react/react.js"}],"/Users/adamrneary/Developer/adventr-realtime/node_modules/react/lib/AutoFocusMixin.js":[function(require,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -19760,7 +19767,7 @@ var ReactFireMixin = {
 
   return ReactFireMixin;
 }));
-},{}]},{},["./src/app.js"])("./src/app.js")
+},{}]},{},["./src/app.coffee"])("./src/app.coffee")
 });
 
 
