@@ -4,7 +4,7 @@ ReactFireMixin = require('reactfire')
 OdometerComponent = require('react-odometer')
 
 firebaseApp = 'https://luminous-heat-2841.firebaseio.com/'
-projectId = location.hash.substring(1) or 14
+projectId = location.hash.substring(1) or 324
 ViewCount = React.createClass
   mixins: [ReactFireMixin]
   getInitialState: ->
